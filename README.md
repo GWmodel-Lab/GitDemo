@@ -140,7 +140,9 @@ git fetch HuYigong/GitDemo
 **签出分支**：签出同样也是使用的 `git checkout` ，后面加分支名。这个分支可以是一个远程分支。如果签出的分支名是远程分支名，那么签出的结果是使 HEAD 指向一个提交记录，此时需要再执行下列命令创建一个本地分支，这个分支拥有的提交记录和远程一样。
 
 ```bash
-git checkout -b <新分支名>
+git checkout -b master-HaoKunT
+## 格式
+# git checkout -b <新分支名>
 ```
 
 在签出之前可以查看一下远程仓库的分支等信息，使用的是 `git branch ` 命令，后面加上 `-r` 参数可以查看远程分支，加上 `-a` 参数可以查看远程和本地分支
