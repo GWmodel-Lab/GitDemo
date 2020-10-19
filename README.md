@@ -104,3 +104,65 @@ git remote <动作> <远程记录名> [其他参数]
 | `set-url` | 设置远程记录的仓库地址 | 远程仓库地址             |
 | `remove`  | 删除远程记录           |                          |
 |           | 显示远程记录列表       | 有 `-v` 表示显示详细信息 |
+
+### 从其他远程仓库合并
+
+这个情况一般发生在当别人的仓库中做了一些更改，想要合并到自己的仓库中时。例如：
+
+- 张三和李四的仓库克隆自同一个仓库，张三做了一些修改，李四想要合并张三的修改
+- 张三克隆了 Vue 的仓库，但尤雨溪合并了其他人提交的 Pull Request ，张三需要将这些更新合并到自己的仓库中
+
+比如我要合并 HaoKunT/GitDemo 的仓库，执行这样操作的完整流程是这样的
+
+```bash
+git remote add HaoKunT git@github.com:HaoKunT/GitDemo.git
+git fetch HaoKunT
+git checkout HaoKunT/master 
+git checkout -b master-HaoKunT
+git checkout master
+git merge --no-ff master-HaoKunT
+```
+
+总结起来有四步：添加远程、获取远程、签出分支、合并分支。
+
+**添加远程**：添加一个远程记录，地址是远程仓库。和之前所讲的一样。
+
+**获取远程**：获得远程仓库中的提交记录。这里使用的是 `git fetch` 命令，后面可以加一个远程记录名作为参数，用于将远程仓库的记录获取到本地仓库的 .git 文件夹中，而不对代码文件作修改。如果要获取一个远程记录中的仓库 HuYigong/GitDemo 的递交记录，使用方法是
+
+```bash
+git fetch HuYigong/GitDemo
+## 格式
+# git fetch <远程记录名>
+```
+
+而如果不加参数，则认为是获取 origin 远程的提交记录。
+
+**签出分支**：签出同样也是使用的 `git checkout` ，后面加分支名。这个分支可以是一个远程分支。如果签出的分支名是远程分支名，那么签出的结果是使 HEAD 指向一个提交记录，此时需要再执行下列命令创建一个本地分支，这个分支拥有的提交记录和远程一样。
+
+```bash
+git checkout -b <新分支名>
+```
+
+在签出之前可以查看一下远程仓库的分支等信息，使用的是 `git branch ` 命令，后面加上 `-r` 参数可以查看远程分支，加上 `-a` 参数可以查看远程和本地分支
+
+```bash
+git branch -a -v 
+## 输出
+#  main                4566a89 Create README.md
+#* master-HaoKunT      4566a89 Create README.md
+#  remotes/origin/HEAD -> origin/main
+#  remotes/origin/main 4566a89 Create README.md
+#  remotes/qqrepo/main 160531f Update README.md
+```
+
+**合并分支**：签出到要合并到的分支后，同样也是使用 `git merge ` 命令来合并新的分支。
+
+> 三个签出的操作，可以使用另一套方法完成：新建分支、设置上游、拉取代码。
+>
+> ```bash
+> git checkout -b master-HaoKunT
+> git branch --set-upstream-to=HaoKunT/master 
+> git pull --rebase
+> ```
+>
+> 其中，`git branch` 所加的选项 `--set-upstream-to=HaoKunT/master` 称为设置上游。
