@@ -166,3 +166,14 @@ git branch -a -v
 > ```
 >
 > 其中，`git branch` 所加的选项 `--set-upstream-to=HaoKunT/master` 称为设置上游。
+
+### 推送到其他远程仓库
+
+如果要推送到的远程仓库有权限，那么可以直接使用 `git push` 命令推送到远程仓库，后面跟上要推送到的远程记录名，远程会创建一个相同的分支。例如，将 master 分支推送到 HaoKunT/master 
+
+```bash
+git push HaoKunT master
+```
+
+如果后面不加 `master` 参数，则指定推送当前分支。
+
