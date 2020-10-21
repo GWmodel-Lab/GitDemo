@@ -229,7 +229,7 @@ git push HaoKunT master
 
 #### Git Workflow
 
-这是来自 Git 本身推荐的工作流，比较适合一般的多人协作开发项目。其特点是：
+这是[来自 Git 本身推荐的工作流](https://home.cs-tao.cc/blog/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/Git-WorkFlow-%E5%B0%8F%E8%AE%B0/)，比较适合一般的多人协作开发项目。其特点是：
 
 - 远程仓库只有一个，所有人或部分人对远程仓库具有读写权限。
 - master 分支作为正式发布版本，release 分支作为预发布版本。
@@ -269,7 +269,7 @@ git push HaoKunT master
 
 #### GitHub Workflow
 
-这是 GitHub 推荐的工作流，比较适合一般的开源项目的开发。
+这是[来自 GitHub 推荐的工作流](https://guides.github.com/introduction/flow/index.html)，比较适合一般的开源项目的开发。
 
 ![GitHub Workflow](./images/GitHubWorkflow.jpg)
 
@@ -280,7 +280,7 @@ git push HaoKunT master
 - 推荐每个人直接将更改应用到 `master` 分支上，而不需要 `develop` 分支等。个人仓库如何维护，中央仓库并不关心。
 - 个人远程仓库通过 Pull Request 向中央仓库提交更改。
 
-这个工作流不同公司也有不同的扩展方法，如字节跳动一般采用如下工作流
+这个工作流不同公司也有不同的扩展方法，如[字节跳动团队](https://zhuanlan.zhihu.com/p/257158164)一般采用如下工作流
 
 ![ByteDance Workflow](./images/ByteDanceWorkflow.jpg)
 
