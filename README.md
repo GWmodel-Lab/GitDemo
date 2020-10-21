@@ -604,6 +604,14 @@ git fetch organize
 git rebase organize/main
 ```
 
+或者使用 `git pull --rebase` 相当于将后两个命令合并
+
+```bash
+# [branch: main]
+git remote add organize git@github.com:GWmodel-Lab/GitDemo.git
+git pull --rebase organize main
+```
+
 使用 PR 的好处在于：
 
 - 可以和持续集成服务结合，对代码进行自动测试
