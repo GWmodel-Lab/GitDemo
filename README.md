@@ -137,6 +137,10 @@ r1.2 = r1.1 + change(rb1.1.2.2 - rb1.1.2.1) + change(rb1.1.2.1-r1.1)
 
 上面的两个改变都记录在,v文件中，所以很容易提取。
 
+在多用户情况下，可以创建多个分支进行开发，比如：
+
+![多分支](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/%E5%A4%9A%E5%88%86%E6%94%AF.png)
+
 在这样的多分支合并的情况下，有可能出现冲突(colliding)。比如上图中，第一次合并和第二次合并都对r1.1文件的同一行进行了修改，那么r1.3将不知道如何去修改这一行 (第二次合并比图示的要更复杂一些，分支需要先将主干拉到本地，合并过之后传回主干，但这一细节并不影响我们这里的讨论)。CVS要求冲突发生时的用户手动解决冲突。用户可以调用编辑器，对文件发生合并冲突的地方进行修改，以决定最终版本(r1.3)的内容。
 
  
@@ -160,7 +164,7 @@ CVS也有许多常常被人诟病的地方，比如下面几条：
 - 主要用于管理ASCII文件：不能方便的管理Binary文件和Unicode文件
 - 分支与合并需要耗费大量的时间：CVS的分支和合并非常昂贵。分支需要复制，合并需要计算所有的改变并应用到主干。因此，CVS鼓励尽早合并分支。
 
-CVS还有其它一些富有争议的地方。随着时间，人们对CVS的一些问题越来越感到不满 (而且程序员喜欢新鲜的东西)，Subversion应运而生。Subversion的开发者Karl Fogel和Jim Blandy是长期的CVS用户。赞助开发的CollabNet, Inc.希望他们写一个CVS的替代VCS。这个VCS应该有类似于CVS的工作方式，但对CVS的缺陷进行改进，并提供一些CVS缺失的功能。这就好像刘备从曹营拉出来单干的刘备一样。
+CVS还有其它一些富有争议的地方。随着时间，人们对CVS的一些问题越来越感到不满 (而且程序员喜欢新鲜的东西)，Subversion应运而生。Subversion的开发者Karl Fogel和Jim Blandy是长期的CVS用户。赞助开发的CollabNet, Inc.希望他们写一个CVS的替代VCS。这个VCS应该有类似于CVS的工作方式，但对CVS的缺陷进行改进，并提供一些CVS缺失的功能。
 
 总体上说，Subversion在许多方面沿袭CVS，也是集中管理库，通过记录改变来追踪历史，允许分支和合并，但并不鼓励过多分支。Subversion在一些方面得到改善。Subversion的合并是原子操作。它可以追踪文件的附加信息，并能够同样的管理Binary和Unicode文件。但CVS和Subversion又有许多不同：
 
@@ -190,13 +194,15 @@ git的作者是Linus Torvald。对，就是写Linux Kernel的那个Linus Torvald
 - 一个commit对象代表了某次提交，它保存有修改人，修改时间和附加信息，并指向一个文件树。这一点与Subversion类似，即每次提交为一个文件系统树。
 - 一个tag对象包含有tag的名字，并指向一个commit对象。
 
+![Git的存储结构](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/Git的存储结构.png)
+
 每个对象的内容的checksum校验(checksum校验可参阅[IP头部的checksum](http://www.cnblogs.com/vamei/archive/2012/12/02/2796988.html))都经过SHA1算法的HASH转换。每个对象都对应一个40个字符的HASH值。每个对象对应一个HASH值。两个内容不同的对象不会有相同的HASH值(SHA1有可能发生碰撞，但概率非常非常非常低)。这样，git可以随时识别各个对象。通过HASH值，我们可以知道这个对象是否发生改变。
 
 
 
 在整个开发过程中，可能会有许多次提交(commit)。每次commit的时候，git并不总是复制所有的对象。git会检验所有对象的HASH值。如果该对象的HASH值已经存在，说明该对象已经保存过，并且没有发生改变，所以git只需要调整新建tree或者commit中的指针，让它们指向已经保存过的对象就可以了。git在commit的时候，只会新建HASH值发生改变的对象。如下图所示，我们创建新的commit的时候，只需要新建一个commit对象，一个tree对象和一个blob对象就足够了，而不需要新建整个文件系统树。
 
-
+![Git的commit](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/Git%E7%9A%84commit.png)
 
 可以看到，与CVS,Subversion保存改变(file delta)的方式形成对照，git保存的不是改变，而是此时的文件本身。由于不需要遵循改变路径来计算历史版本，所以git可以快速的查阅历史版本。git可以直接提取两个commit所保存的文件系统树，并迅速的算出两个commit之间的改变。
 
@@ -226,6 +232,10 @@ CVS和SVN是集中式版本控制的典型代表，其具有的特点是：
 
 
 
+![集中式版本控制](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/%E9%9B%86%E4%B8%AD%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6.jpg)
+
+
+
 #### 分布式版本控制（DCS）
 
 最具代表性的就是Git
@@ -236,6 +246,10 @@ CVS和SVN是集中式版本控制的典型代表，其具有的特点是：
 - 即使服务器宕机了，仅在本地也可以完成版本管理的操作
 
 像Git这种分布式版本控制方式的缺点是会占用较大的磁盘空间，但是随着现在硬盘的大小越来越大，也不再是一个问题。另一个缺点是，保密性较差，因为客户端也有整个项目的所有版本历史，因此一旦在客户端处泄密，整个项目的所有版本源码就都被泄露出去了。
+
+
+
+![分布式版本控制](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6.jpg)
 
 
 
