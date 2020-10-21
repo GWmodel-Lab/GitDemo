@@ -223,3 +223,71 @@ git push HaoKunT master
 
 一般情况下，保持这样的关系链不变，而且总是从 `B` 合并到 `A` ，而避免反向合并。如果要在 `B` 分支上应用 `A` 分支的更改，需要使用 `git rebase` 命令。
 
+### 工作流
+
+即 Git 工作流。但其实目前不只有一种工作流方案，不同公司内部会有不同的工作流，我们实验室不同项目也采用过不同的工作流（例如 [VideoFireMonitorSystem](https://github.com/GWmodel-Lab/VideoFireMonitorSystem) 和 [实验室主页](https://github.com/GWmodel-Homepage/) 两个项目）。所以工作流的选取是根据实际情况而定的。下面介绍几个常用的工作流，并分析一下适用情况。
+
+#### Git Workflow
+
+这是来自 Git 本身推荐的工作流，比较适合一般的多人协作开发项目。其特点是：
+
+- 远程仓库只有一个，所有人或部分人对远程仓库具有读写权限。
+- master 分支作为正式发布版本，release 分支作为预发布版本。
+- 分支的权限不做明确要求，所有对仓库具有读写权限的人均可读可写。
+
+![Git Workflow](./images/GitWorkflow.png)
+
+这个工作流主要包含几个类型的分支：
+
+- 长期分支 `master` 用于管理发布版本，每次 commit (其他分支向它合并形成的 merge commit)应当对应一个 Tag，也就是形成一个发布版。
+- 长期分支 `develop` 用于管理开发版本，所有的开发都会汇总到这个分支。
+- 短期分支 `release` 用于在正式发布之前的预发布版本，在这个版本中的提交都应当是修复 Bug，不能在本分支上开发新的功能。本分支应当从 `develop` 检出，Bug 修复之后合并到 `develop` 和 `master`。
+- 短期分支 `feature` 用于新功能的开发，可以有多个。本分支应当从 `develop` 分支检出，功能开发完成后合并(merge)到 `develop`。
+- 短期分支 `hotfix` 用于在版本发布之后的紧急 Bug 修复。本分支应当从 `master` 分支检出，在 Bug 修复之后直接合并(merge)到 `master` 和 `develop` 。
+
+整个开发过程中，可以根据如下时序图进行分支的创建、合并等操作。
+
+![Git Workflow 时序图](./images/GitWorkflowTime.png)
+
+这个 Git Workflow 适合于以下情况的使用：
+
+- 远程仓库只有一个，并不涉及多个远程仓库的情况
+- 专门有一个预发布的过程，往往对应了 β-测试。测试时不再开发其他功能
+
+因而被称为“单远程库预发布”模式。
+
+#### 简化的 Git Workflow 
+
+这个工作流去掉了 Git Workflow 中的 `develop` 和 `release` 分支，所有 `feature` 分支从 `master` 分支上签出，并合并到 `master` 分支上。
+
+这个 Git Workflow 适合于以下情况的使用：
+
+- 团队成员比较少，或只有个人开发
+- 不需要、或没有精力维护预发布过程
+
+往往个人开发者在开发时，采用这个工作流比较合适。
+
+#### GitHub Workflow
+
+这是 GitHub 推荐的工作流，比较适合一般的开源项目的开发。
+
+![GitHub Workflow](./images/GitHubWorkflow.jpg)
+
+这个工作流的特点是：
+
+- 有一个中央仓库，托管在 GitHub 上，每个开发人员通过 Fork 操作创建自己的远程仓库。
+- 自己只操作自己的远程仓库，一般没有中央仓库的写权限。
+- 推荐每个人直接将更改应用到 `master` 分支上，而不需要 `develop` 分支等。个人仓库如何维护，中央仓库并不关心。
+- 个人远程仓库通过 Pull Request 向中央仓库提交更改。
+
+这个工作流不同公司也有不同的扩展方法，如字节跳动一般采用如下工作流
+
+![ByteDance Workflow](./images/ByteDanceWorkflow.jpg)
+
+这种工作流适合于以下情况的使用：
+
+- 团队开发人员众多，或者并不都是团队内部人士。
+- 有专门的代码审查和测试人员，或配置了自动测试环境。
+
+对于“单远程库”，如果设置某些分支的写权限，也可以实现类似于此方法的工作流。
+
