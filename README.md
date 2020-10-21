@@ -123,7 +123,15 @@ git checkout master
 git merge --no-ff master-HaoKunT
 ```
 
-总结起来有四步：添加远程、获取远程、签出分支、合并分支。
+或者省略到中间 `git checkout` 的操作，直接合并“远程分支”。
+
+```bash
+git remote add HaoKunT git@github.com:HaoKunT/GitDemo.git
+git fetch HaoKunT
+git merge --no-ff HaoKunT/master
+```
+
+总结起来有四步：添加远程、获取远程、签出分支、合并分支。签出分支一步可以省略，此时合并分支直接合并远程分支。
 
 **添加远程**：添加一个远程记录，地址是远程仓库。和之前所讲的一样。
 
@@ -157,8 +165,6 @@ git branch -a -v
 #  remotes/qqrepo/main 160531f Update README.md
 ```
 
-**合并分支**：签出到要合并到的分支后，同样也是使用 `git merge ` 命令来合并新的分支。
-
 > 三个签出的操作，可以使用另一套方法完成：新建分支、设置上游、拉取代码。
 >
 > ```bash
@@ -168,6 +174,10 @@ git branch -a -v
 > ```
 >
 > 其中，`git branch` 所加的选项 `--set-upstream-to=HaoKunT/master` 称为设置上游。
+
+**合并分支**：签出到要合并到的分支后，同样也是使用 `git merge ` 命令来合并新的分支。后面可以加一个本地分支，也可以加一个远程分支。
+
+> 之所以本地仓库可以直接合并远程分支，是因为经过 `git fetch` 操作后，远程仓库中的所有提交记录就已经下载到本地仓库中了，此时这些分支就和本地仓库中未签出的分支一样，可以进行同样的操作。所以他们虽然叫做远程分支，但是是存储在本地仓库中的。
 
 ### 推送到其他远程仓库
 
