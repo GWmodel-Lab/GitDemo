@@ -684,3 +684,5 @@ Issues （议题）是 GitHub 、 GitLab 等代码托管服务提供的功能，
 - 团队内部设置的目标
 
 每个 Issues 可以打标签， 可以指定委托人，也可以和 Millstone （里程碑）进行关联，还可以和 GitHub Project 进行联动。因此 Issues 不仅仅是一个 BugClose ，而且也可以作为一个任务管理软件，进行团队任务管理。
+
+![GitHub Issues](./images/GitHubIssues.png)
