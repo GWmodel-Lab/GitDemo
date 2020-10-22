@@ -705,8 +705,7 @@ Issues （议题）是 GitHub 、 GitLab 等代码托管服务提供的功能，
 
 - close, closes, closed
 - fix, fixes, fixed
-- resolves, resolved
-- 解决
+- resolve, resolves, resolved
 
 每个 Issues 也可以关联到一个 Milestone 中。由于 Issues 不能设定截止日期，但是 Milestone 可以，这就比较方便进行项目进度的管理。
 
