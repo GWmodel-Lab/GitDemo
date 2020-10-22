@@ -675,7 +675,7 @@ A0 -> A1 -> A2 -> +
 
 如果是 rebase 操作产生的冲突，和 merge 基本是一样的，采用同样的解决方法解决即可。
 
-### Issues
+### Issues 和 Milestones
 
 Issues （议题）是 GitHub 、 GitLab 等代码托管服务提供的功能，主要目的是提供对于一个问题的讨论，问题可以是
 
@@ -686,3 +686,30 @@ Issues （议题）是 GitHub 、 GitLab 等代码托管服务提供的功能，
 每个 Issues 可以打标签， 可以指定委托人，也可以和 Millstone （里程碑）进行关联，还可以和 GitHub Project 进行联动。因此 Issues 不仅仅是一个 BugClose ，而且也可以作为一个任务管理软件，进行团队任务管理。
 
 ![GitHub Issues](./images/GitHubIssues.png)
+
+一个 Pull Request 可以和 Issues 相关联。关联的方法有三种：
+
+- 在 Pull Request 的内容（不是标题）中输入 `issues-link`
+- 在 Pull Request 包含的提交消息中输入 `issues-link`
+- 在 Issues 或 Pull Request 界面可以手动建立关联
+
+其中 `issues-link` 可以是以下几种格式的一种：
+
+| 链接的 Issues       | 语法                                  | 示例                                    |
+| ------------------- | ------------------------------------- | --------------------------------------- |
+| 同一仓库中的 Issues | [KEYWORD] #issues编号                 | Close #10                               |
+| 不同仓库中的 Issues | [KEYWORD] owner/repository#issues编号 | Fixes octo-org/octo-repo#100            |
+| 多个 Issues         | 对每个 Issues 使用完整的语法          | Close #10, fixes octo-org/octo-repo#100 |
+
+其中 KEYWORD 如果是以下几个之一，那么当这个 PR 被合并的时候， Issues 也会同时被关闭
+
+- close, closes, closed
+- fix, fixes, fixed
+- resolves, resolved
+- 解决
+
+每个 Issues 也可以关联到一个 Milestone 中。由于 Issues 不能设定截止日期，但是 Milestone 可以，这就比较方便进行项目进度的管理。
+
+![GitHub Milestones](./images/GitHubMilestones.png)
+
+当 Issues 被合并之后，与之关联的 Milestone 的进度条就会增长，比较形象地展示了目前项目的进度。
