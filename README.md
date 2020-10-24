@@ -318,19 +318,18 @@ git clone git@github.com:GWmodel-Lab/GitDemo.git GitTutorial
 
 ```shell
 $ git status
-On branch master
-
-No commits yet
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-
-        members/HaoKunT.md
-
+On branch main                                                              
+Your branch is up to date with 'origin/main'.                               
+                                                                            
+Untracked files:                                                            
+  (use "git add <file>..." to include in what will be committed)            
+                                                                            
+        members/HaoKunT.md                                                  
+                                                                            
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-可以看到status命令为我们展示了此时仓库的一些状态，例如我们现在处于master分支上，目前还没有提交过，有一个还未被追踪的文件名叫`members/HaoKunT.md`，并且还提示了我们运行`git add <file>`命令可以将文件纳入追踪。
+可以看到status命令为我们展示了此时仓库的一些状态，例如我们现在处于main分支上，有一个还未被追踪的文件名叫`members/HaoKunT.md`，并且还提示了我们运行`git add <file>`命令可以将文件纳入追踪。
 
 那么我们就运行add命令
 
@@ -342,9 +341,8 @@ $ git add members/HaoKunT.md
 
 ```shell
 $ git status
-On branch master
-
-No commits yet
+On branch main                                                              
+Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
@@ -363,9 +361,8 @@ Changes to be committed:
 ```shell
 $ git rm --cached members/HaoKunT.md
 $ git status
-On branch master
-
-No commits yet
+On branch main                                                              
+Your branch is up to date with 'origin/main'.
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
