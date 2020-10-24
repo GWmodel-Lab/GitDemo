@@ -121,7 +121,7 @@ RCS的互斥写入机制避免了多人同时修改同一个文件的可能，�
 
 相对与后来的版本管理软件，RCS纯粹线性的开发方式非常不利于团队合作。但RCS为多用户写入冲突提供了一种有效的解决方案。RCS的版本管理功能逐渐被其他软件(比如CVS)取代，但时至今日，它依然是常用的系统管理工具。
 
-#### 一个新的软件诞生了
+#### CVS
 
 1986年，Dick Grune写了一系列的shell脚本用于版本管理，并最终以这些脚本为基础，构成了CVS (Concurrent Versions System)。CVS后来用C语言重写。CVS是开源软件。在当时，Stallman刚刚举起GNU的大旗，掀起开源允许的序幕。CVS被包含在GNU的软件包中，并因此得到广泛的推广，最终击败诸多商业版本的VCS，呈一统天下之势。
 
@@ -139,7 +139,7 @@ r1.2 = r1.1 + change(rb1.1.2.2 - rb1.1.2.1) + change(rb1.1.2.1-r1.1)
 
 ![多分支](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/%E5%A4%9A%E5%88%86%E6%94%AF.png)
 
-在这样的多分支合并的情况下，有可能出现冲突(colliding)。比如上图中，第一次合并和第二次合并都对r1.1文件的同一行进行了修改，那么r1.3将不知道如何去修改这一行 (第二次合并比图示的要更复杂一些，分支需要先将主干拉到本地，合并过之后传回主干，但这一细节并不影响我们这里的讨论)。CVS要求冲突发生时的用户手动解决冲突。用户可以调用编辑器，对文件发生合并冲突的地方进行修改，以决定最终版本(r1.3)的内容。
+在这样的多分支合并的情况下，有可能出现冲突(colliding)。比如上图中，第一次合并和第二次合并都对r1.1文件的同一行进行了修改，那么r1.3将不知道如何去修改这一行。CVS要求冲突发生时的用户手动解决冲突。用户可以调用编辑器，对文件发生合并冲突的地方进行修改，以决定最终版本(r1.3)的内容。
 
  
 
@@ -170,10 +170,6 @@ CVS还有其它一些富有争议的地方。随着时间，人们对CVS的一�
 CVS中的版本是针对某个文件的，CVS中每次commit生成一个文件的新版本。Subversion中的版本是针对整个文件系统的(包含多个文件以及文件组织方式)，每次commit生成一个整个项目文件系统树的新版本。
 Subversion依赖类似于硬连接(hard link)的方式来提高效率，避免过多的复制文件本身。Subversion不会从库下载整个主干到本地，而只是下载主干的最新版本。
 
- 
-
-在Subversion刚刚诞生的时候，来自CVS用户的抱怨不断。他们觉得在Subversion中有太多的改动，有些改动甚至是相对于CVS的倒退。比如CVS中的tag，在Subversion中被改为直接复制版本的文件系统树到一个特殊的文件夹。然而，随着时间的推移，Subversion逐渐推广 (Subversion已经是Apache中自带的一个模块了，Subversion应用于GCC、SourceForge，新浪APP Engine等项目)，并依然有活跃的开发，而CVS则逐渐沉寂。事实上，许多UNIX的参考书的新版本中，都缩减甚至删除了CVS的内容。
-
 
 
 #### Git
@@ -194,7 +190,7 @@ git的作者是Linus Torvald。对，就是写Linux Kernel的那个Linus Torvald
 
 ![Git的存储结构](https://media.githubusercontent.com/media/HaoKunT/GitDemo/main/figure/Git的存储结构.png)
 
-每个对象的内容的checksum校验(checksum校验可参阅[IP头部的checksum](http://www.cnblogs.com/vamei/archive/2012/12/02/2796988.html))都经过SHA1算法的HASH转换。每个对象都对应一个40个字符的HASH值。每个对象对应一个HASH值。两个内容不同的对象不会有相同的HASH值(SHA1有可能发生碰撞，但概率非常非常非常低)。这样，git可以随时识别各个对象。通过HASH值，我们可以知道这个对象是否发生改变。
+每个对象的内容的checksum校验都经过SHA1算法的HASH转换。每个对象都对应一个40个字符的HASH值。每个对象对应一个HASH值。两个内容不同的对象不会有相同的HASH值(SHA1有可能发生碰撞，但概率非常非常非常低)。这样，git可以随时识别各个对象。通过HASH值，我们可以知道这个对象是否发生改变。
 
 
 
@@ -211,10 +207,6 @@ git的作者是Linus Torvald。对，就是写Linux Kernel的那个Linus Torvald
 
 
 由于git创建、合并和删除分支的成本极为低廉，所以git鼓励根据需要创建多个分支。实际上，如果分支位于不同的站点(site)，属于不同的开发者，那么就构成了分布式的多分支开发模式。每个开发者都在本地复制有自己的库，并可以基于本地库创建多个本地分支工作。开发者可以在需要的时候，选取某个本地分支与远程分支合并。git可以方便的建立一个分布式的小型开发团队。比如我和朋友两人各有一个库，各自开发，并相互拉对方的库到本地库合并(如果上面master，develop代表了两个属于不同用户的分支，就代表了这一情况)。当然，git也允许集中式的公共仓库存在，或者多层的公共仓库，每个仓库享有不同的优先级。git的优势不在于引进了某种开发模式，而是给了你设计开发模式的自由。
-
-
-
-版本控制软件分为两大类，集中式版本控制和分布式版本控制
 
 #### 集中式版本控制（VCS）
 
@@ -261,6 +253,236 @@ CVS和SVN是集中式版本控制的典型代表，其具有的特点是：
 >
 > GitHub已于2018年被微软收购。
 
+## 本地仓库操作
+
+### 初始化
+
+如果想使用Git进行代码管理，首先需要初始化一个空白仓库。使用下面命令来初始化一个新仓库
+
+```shell
+git init GitDemo
+```
+
+这样就会在当前的目录下新建一个名叫`GitDemo`的目录，并初始化Git。
+
+初始化Git仓库会在仓库的目录下新建一个`.git`的隐藏目录，在Windows下文件是否隐藏是由文件属性决定的，而Linux下则是以文件是否为`.`开头，但是无论是哪个操作系统，目录名均为`.git`。这个目录下存储有Git所需的一些数据结构，头部指针的位置等等元数据信息，作为使用者来说，我们不需要管这个。
+
+### 创建一个文件，编辑，并提交
+
+初始化完成后我们就可以在仓库里面写自己的项目了，例如我们创建一个文件，名叫`hello.c`，然后在文件中编辑
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello, GitDemo!\n");
+}
+```
+
+
+
+然后我们执行下面命令，查看一下Git是不是能够察觉到我们的项目发生了变化
+
+```shell
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        hello.c
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+可以看到status命令为我们展示了此时仓库的一些状态，例如我们现在处于master分支上，目前还没有提交过，有一个还未被追踪的文件名叫`hello.c`，并且还提示了我们运行`git add <file>`命令可以将文件纳入追踪。
+
+那么我们就运行add命令
+
+```shell
+$ git add hello.c
+```
+
+执行完之后再次运行`git status`
+
+```shell
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   hello.c
+```
+
+可以看到`hello.c`文件已经被纳入了追踪管理，并且标识出来这是一个新加入管理的文件
+
+大家需要明白一个概念，即暂存区。
+
+暂存区是指运行`git add`命令后，文件进入的暂存的状态，在这个状态下，文件并没有被提交到版本库中，即不会形成一个提交，只是一个暂时存储的一个区域，通常在术语里面被称为`cached`，或者`staged`。作为开发者，我们可以将多次修改的内容提交到暂存区，暂存区的文件可以随时被删除，也可以随时加进来，并不会影响你现在编辑的文件。
+
+文件脱离暂存区的方式是运行下面的命令
+
+```shell
+$ git rm --cached hello.c
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        hello.c
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ cat hello.c
+#include <stdio.h>
+
+int main() {
+    printf("Hello, GitDemo!\n");
+}
+```
+
+可以看到我们回到了未暂存的状态，此时文件依然是完整的
+
+那么如何让我们的修改形成一个版本呢，这个时候就要请出commit命令了，当运行commit命令之后，git会将暂存区里面的所有暂存的文件打包形成一个新包，并与原来的上一个版本合并，形成一个新的版本，并记录下这个版本的提交时间，SHA1校验值，提交人等等，如果你是第一次安装git并且第一次提交，则会拒绝提交，要求你输入自己的邮箱，用户名，以形成提交人信息。
+
+```shell
+$ git commit -m "hello GitDemo"
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+```
+
+我们按照指示运行下面两行代码
+
+```shell
+$ git config --global user.email "1151510533@qq.com"
+$ git config --global user.name "HaoKunT"
+```
+
+然后再次运行提交命令便可以顺利提交了
+
+```shell
+$ git commit -m "hello GitDemo"
+[master (root-commit) c8039de] hello GitDemo
+ 1 file changed, 5 insertions(+)
+ create mode 100644 hello.c
+```
+
+细心的小伙伴可能会发现，commit命令后面带了一个参数`-m`，这个参数是`message`的缩写，指的是我们这次提交的一个提交信息，用于描述这次提交的内容，干了些什么事情之类的，如果不带这个参数的话，则git会打开你的默认编辑器，然后在编辑器中编写描述。
+
+### 查看提交历史
+
+OK，我们顺利的提交了我们的代码，并且形成了版本库，那么我们如何查看我的这次提交呢？
+
+其实，大家的这种想法就是要查看提交历史，git自然为我们提供了相应的命令
+
+```shell
+$ git log
+commit c8039de1f0299d8e389dcb9b3320d529bc96c3cc (HEAD -> master)
+Author: HaoKunT <1151510533@qq.com>
+Date:   Thu Oct 22 18:16:25 2020 +0800
+
+    hello GitDemo
+```
+
+可以看到，我们确实形成了一个版本，其中提交的SHA1码为`c8039de1f0299d8e389dcb9b3320d529bc96c3cc`，提交人为`HaoKunT`，并且后面带着邮箱，提交时间则是2020年的10月22日18点16分25秒，最后则是我们在提交的时候带有的一个描述信息，是`hello GitDemo`。
+
+### 查看文件不同
+
+上述是整个本地仓库操作的最基本的操作，理论上掌握这些操作就可以进行本地代码管理了。下面将介绍部分Git的用法，用以更好的帮助大家使用Git进行版本控制。
+
+首先是如何查看当前编辑的文件和存储库中文件的不同，这里我们要使用到diff指令
+
+```shell
+$ git diff <file>
+```
+
+例如将hello.c文件修改一下
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+}
+```
+
+此时运行diff指令
+
+```shell
+$ git diff hello.c
+The file will have its original line endings in your working directory
+diff --git a/hello.c b/hello.c
+index 5be29a8..9b216a5 100644
+--- a/hello.c
++++ b/hello.c
+@@ -1,5 +1,5 @@
+ #include <stdio.h>
+
+ int main() {
+-    printf("Hello, GitDemo!\n");
++    printf("Hello, world!\n");
+ }
+```
+
+可以看到已经指示出减少了`printf("Hello, GitDemo!\n");`这行，增加了`printf("Hello, world!\n");`这一行。
+
+> 注意：diff命令只会按行进行比较，不做行内的比较
+
+### 分支
+
+分支是Git中一个非常重要的概念，使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。分支是进行团队协作不可或缺的基础。在本节，我们来学习分支的基本操作，在团队写作的章节将会学到如何进行分支合并高级用法。
+
+首先是分支的创建，实际上我们在初始化仓库的时候，就已经创建了一个默认分支，默认分支名叫`master`（这个默认名字目前风雨飘摇，[详情请见](https://github.com/github/renaming)）。在不切换分支的情况下，我们可以一直在这个分支上进行开发，但是这存在一些问题。例如：
+
+- 我想能够随时访问到稳定的代码。（可能此时你在开发的功能还处于实验阶段）
+- Linux版和Windows版代码不同
+- 多人开发
+
+正是因为单一线性的代码库不能满足我们的需求，因此引入了分支的概念
+
+#### 创建分支
+
+```shell
+$ git branch <branch-name>
+```
+
+#### 查看分支
+
+```shell
+$ git branch -a # 查看远程分支
+$ git branch -r # 查看远程分支
+$ git branch    # 查看本地分支
+```
+
+#### 切换分支
+
+```shell
+$ git checkout <branch-name>
+```
+
+#### 删除分支
+
+```shell
+$ git branch -d <branch-name>
+$ git branch -D <branch-name>
+```
+
+可以看到删除分支有两条指令，其中参数不同，分别为`-d`和`-D`参数，两者之间的区别在于，使用`-d`参数的时候，要求该分支必须与其上有分支进行合并，才可以被删除，例如假设dev分支是由master分支创建而来，那么master分支即为dev的上游分支，如果我想创建dev分支，则必须让dev分支与master分支进行合并才可以。`-D`参数则是`-d -f`的简写，代表强制删除，没有必须与上游分支合并的要求。
 
 ## 操作其他远程仓库
 
@@ -712,3 +934,4 @@ Issues （议题）是 GitHub 、 GitLab 等代码托管服务提供的功能，
 ![GitHub Milestones](./images/GitHubMilestones.png)
 
 当 Issues 被合并之后，与之关联的 Milestone 的进度条就会增长，比较形象地展示了目前项目的进度。
+
