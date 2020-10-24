@@ -255,7 +255,14 @@ CVS和SVN是集中式版本控制的典型代表，其具有的特点是：
 
 ## 本地仓库操作
 
-### 初始化
+### 新建本地仓库
+
+新建一个仓库的方法有两种：
+
+- 在本地文件夹使用 git 初始化一个空白仓库
+- 从 GitHub 等代码托管平台克隆一个仓库
+
+#### 初始化
 
 如果想使用Git进行代码管理，首先需要初始化一个空白仓库。使用下面命令来初始化一个新仓库
 
@@ -267,19 +274,45 @@ git init GitDemo
 
 初始化Git仓库会在仓库的目录下新建一个`.git`的隐藏目录，在Windows下文件是否隐藏是由文件属性决定的，而Linux下则是以文件是否为`.`开头，但是无论是哪个操作系统，目录名均为`.git`。这个目录下存储有Git所需的一些数据结构，头部指针的位置等等元数据信息，作为使用者来说，我们不需要管这个。
 
-### 创建一个文件，编辑，并提交
+#### 从 GitHub 克隆一个仓库
 
-初始化完成后我们就可以在仓库里面写自己的项目了，例如我们创建一个文件，名叫`hello.c`，然后在文件中编辑
+在 GitHub 中打开仓库 [GitDemo](https://github.com/GWmodel-Lab/GitDemo) 的页面，可以看到其克隆地址。有两种协议的克隆地址
 
-```c
-#include <stdio.h>
+- HTTS 即通过 HTTPS 协议传输文件的地址 `https://github.com/GWmodel-Lab/GitDemo.git` ，这个地址通过用户名、密码登录。
+- SSH 即通过 SSH 协议传输文件的地址 `git@github.com:GWmodel-Lab/GitDemo.git` ，在 GitHub 个人设置中[配置 SSH 密钥](https://github.com/settings/keys)后，即可无密码访问仓库。
 
-int main() {
-    printf("Hello, GitDemo!\n");
-}
+将克隆地址复制下来，在本地找一个文件夹，在命令行中输入如下命令
+
+```bash
+git clone git@github.com:GWmodel-Lab/GitDemo.git
 ```
 
+Git 会为我们自动创建 `GitDemo` 的文件夹，并将当前分支的内容放在文件夹中。这个文件夹下面有一个隐藏的文件夹 `.git` ，其中放置了所有 Git 仓库的信息，包括所有分支的提交记录等。要求当前文件夹中不能存在同名文件夹，或者同名文件夹中不能有任何内容。
 
+如果想指定 Git 克隆下来的文件夹，如 `GitTutorial`，在后面加上文件夹的名字即可
+
+```bash
+git clone git@github.com:GWmodel-Lab/GitDemo.git GitTutorial
+```
+
+需要注意的是，指定的文件夹也不能在当前文件夹下存在。
+
+> 组内搭建的 GitLab 服务，只能通过 HTTP 协议访问，这是因为 SSH 访问通过 SSH 端口（一般是22），但是我们的服务器没有开通这个端口。此外，需要将域名 gitlab.gwmodel.whu.edu.cn 加入到 hosts 文件中，并解析到 202.114.121.40 这个 IP 地址，此时通过服务器上的反向代理，即可访问到 Git 仓库。
+
+以下内容基于克隆的 GitDemo 仓库进行。
+
+### 创建一个文件，编辑，并提交
+
+初始化完成后我们就可以在仓库里面写自己的项目了，例如我们在 `members` 文件夹下创建一个文件，名叫`HaoKunT.md`，然后在文件中编辑
+
+```markdown
+# HaoKunT
+
+- 🏫 Wuhan University
+- 📍 China
+- 🏠 [HaoKunT的博客|GIT学生党，喜欢新技术](https://hkvision.cn)
+
+```
 
 然后我们执行下面命令，查看一下Git是不是能够察觉到我们的项目发生了变化
 
@@ -292,17 +325,17 @@ No commits yet
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-        hello.c
+        members/HaoKunT.md
 
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-可以看到status命令为我们展示了此时仓库的一些状态，例如我们现在处于master分支上，目前还没有提交过，有一个还未被追踪的文件名叫`hello.c`，并且还提示了我们运行`git add <file>`命令可以将文件纳入追踪。
+可以看到status命令为我们展示了此时仓库的一些状态，例如我们现在处于master分支上，目前还没有提交过，有一个还未被追踪的文件名叫`members/HaoKunT.md`，并且还提示了我们运行`git add <file>`命令可以将文件纳入追踪。
 
 那么我们就运行add命令
 
 ```shell
-$ git add hello.c
+$ git add members/HaoKunT.md
 ```
 
 执行完之后再次运行`git status`
@@ -316,10 +349,10 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
 
-        new file:   hello.c
+        new file:   members/HaoKunT.md
 ```
 
-可以看到`hello.c`文件已经被纳入了追踪管理，并且标识出来这是一个新加入管理的文件
+可以看到`members/HaoKunT.md`文件已经被纳入了追踪管理，并且标识出来这是一个新加入管理的文件
 
 大家需要明白一个概念，即暂存区。
 
@@ -328,7 +361,7 @@ Changes to be committed:
 文件脱离暂存区的方式是运行下面的命令
 
 ```shell
-$ git rm --cached hello.c
+$ git rm --cached members/HaoKunT.md
 $ git status
 On branch master
 
@@ -337,15 +370,16 @@ No commits yet
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-        hello.c
+        members/HaoKunT.md
 
 nothing added to commit but untracked files present (use "git add" to track)
-$ cat hello.c
-#include <stdio.h>
+$ cat members/HaoKunT.md
+# HaoKunT
 
-int main() {
-    printf("Hello, GitDemo!\n");
-}
+- 🏫 Wuhan University
+- 📍 China
+- 🏠 https://hkvision.cn
+
 ```
 
 可以看到我们回到了未暂存的状态，此时文件依然是完整的
@@ -353,7 +387,7 @@ int main() {
 那么如何让我们的修改形成一个版本呢，这个时候就要请出commit命令了，当运行commit命令之后，git会将暂存区里面的所有暂存的文件打包形成一个新包，并与原来的上一个版本合并，形成一个新的版本，并记录下这个版本的提交时间，SHA1校验值，提交人等等，如果你是第一次安装git并且第一次提交，则会拒绝提交，要求你输入自己的邮箱，用户名，以形成提交人信息。
 
 ```shell
-$ git commit -m "hello GitDemo"
+$ git commit -m "add: HaoKunT profile"
 
 *** Please tell me who you are.
 
@@ -376,7 +410,7 @@ $ git config --global user.name "HaoKunT"
 然后再次运行提交命令便可以顺利提交了
 
 ```shell
-$ git commit -m "hello GitDemo"
+$ git commit -m "add: HaoKunT profile"
 [master (root-commit) c8039de] hello GitDemo
  1 file changed, 5 insertions(+)
  create mode 100644 hello.c
@@ -392,14 +426,14 @@ OK，我们顺利的提交了我们的代码，并且形成了版本库，那么
 
 ```shell
 $ git log
-commit c8039de1f0299d8e389dcb9b3320d529bc96c3cc (HEAD -> master)
+commit 9b5b8e92804b9ea34e958ac08a8941da62dc6a11 (HEAD -> master)
 Author: HaoKunT <1151510533@qq.com>
 Date:   Thu Oct 22 18:16:25 2020 +0800
 
-    hello GitDemo
+    add: HaoKunT profile
 ```
 
-可以看到，我们确实形成了一个版本，其中提交的SHA1码为`c8039de1f0299d8e389dcb9b3320d529bc96c3cc`，提交人为`HaoKunT`，并且后面带着邮箱，提交时间则是2020年的10月22日18点16分25秒，最后则是我们在提交的时候带有的一个描述信息，是`hello GitDemo`。
+可以看到，我们确实形成了一个版本，其中提交的SHA1码为`9b5b8e92804b9ea34e958ac08a8941da62dc6a11`，提交人为`HaoKunT`，并且后面带着邮箱，提交时间则是2020年的10月22日18点16分25秒，最后则是我们在提交的时候带有的一个描述信息，是`add: HaoKunT profile`。
 
 ### 查看文件不同
 
@@ -411,35 +445,36 @@ Date:   Thu Oct 22 18:16:25 2020 +0800
 $ git diff <file>
 ```
 
-例如将hello.c文件修改一下
+例如将 members/HaoKunT.md 文件修改一下
 
-```c
-#include <stdio.h>
+```markdown
+# HaoKunT
 
-int main() {
-    printf("Hello, World!\n");
-}
+- 🏫 武汉大学
+- 📍 China
+- 🏠 [HaoKunT的博客|GIT学生党，喜欢新技术](https://hkvision.cn)
+
 ```
 
 此时运行diff指令
 
-```shell
-$ git diff hello.c
-The file will have its original line endings in your working directory
-diff --git a/hello.c b/hello.c
-index 5be29a8..9b216a5 100644
---- a/hello.c
-+++ b/hello.c
+```diff
+$ git diff members/HaoKunT.md
+diff --git a/members/HaoKunT.md b/members/HaoKunT.md
+index 198ecbb..1876a5d 100644
+--- a/members/HaoKunT.md
++++ b/members/HaoKunT.md
 @@ -1,5 +1,5 @@
- #include <stdio.h>
+ # HaoKunT
 
- int main() {
--    printf("Hello, GitDemo!\n");
-+    printf("Hello, world!\n");
- }
+-- 🏫 Wuhan University
++- 🏫 武汉大学
+ - 📍 China
+ - 🏠 [HaoKunT的博客|GIT学生党，喜欢新技术](https://hkvision.cn)
+
 ```
 
-可以看到已经指示出减少了`printf("Hello, GitDemo!\n");`这行，增加了`printf("Hello, world!\n");`这一行。
+可以看到已经指示出减少了`- 🏫 Wuhan University`这行，增加了`- 🏫 武汉大学`这一行。可见对于 Git 来说，“修改”即删除并新增。
 
 > 注意：diff命令只会按行进行比较，不做行内的比较
 
