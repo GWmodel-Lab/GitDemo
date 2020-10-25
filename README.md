@@ -284,7 +284,7 @@ git init GitDemo
 将克隆地址复制下来，在本地找一个文件夹，在命令行中输入如下命令
 
 ```bash
-git clone git@github.com:GWmodel-Lab/GitDemo.git
+git clone https://github.com/GWmodel-Lab/GitDemo.git
 ```
 
 Git 会为我们自动创建 `GitDemo` 的文件夹，并将当前分支的内容放在文件夹中。这个文件夹下面有一个隐藏的文件夹 `.git` ，其中放置了所有 Git 仓库的信息，包括所有分支的提交记录等。要求当前文件夹中不能存在同名文件夹，或者同名文件夹中不能有任何内容。
@@ -292,12 +292,10 @@ Git 会为我们自动创建 `GitDemo` 的文件夹，并将当前分支的内�
 如果想指定 Git 克隆下来的文件夹，如 `GitTutorial`，在后面加上文件夹的名字即可
 
 ```bash
-git clone git@github.com:GWmodel-Lab/GitDemo.git GitTutorial
+git clone https://github.com/GWmodel-Lab/GitDemo.git GitTutorial
 ```
 
 需要注意的是，指定的文件夹也不能在当前文件夹下存在。
-
-> 组内搭建的 GitLab 服务，只能通过 HTTP 协议访问，这是因为 SSH 访问通过 SSH 端口（一般是22），但是我们的服务器没有开通这个端口。此外，需要将域名 gitlab.gwmodel.whu.edu.cn 加入到 hosts 文件中，并解析到 202.114.121.40 这个 IP 地址，此时通过服务器上的反向代理，即可访问到 Git 仓库。
 
 以下内容基于克隆的 GitDemo 仓库进行。
 
