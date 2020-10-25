@@ -691,10 +691,10 @@ Git 除了可以操作自己的本地仓库和 origin 远程仓库，也可以�
 
 每个 Git 本地仓库都可以记录许多远程仓库，每个远程仓库记录（简称“远程记录”）都可以起一个名字（简称“远程记录名”），这些远程仓库的地址都可以通过 `git remote` 命令进行操作。常用的操作有增、删、查、改。
 
-**增**：如果要增加一个远程仓库，地址是 https://gitlab.gwmodel.whu.edu.cn/HPDell/GitDemo.git ，并命名为 gitlab ，则使用如下命令
+**增**：如果要增加一个远程仓库，地址是 https://github.com/GWmodel-Lab/GitDemo.git ，并命名为 gitlab ，则使用如下命令
 
 ```bash
-git remote add gitlab http://gitlab.gwmodel.whu.edu.cn/HPDell/GitDemo.git
+git remote add organize https://github.com/GWmodel-Lab/GitDemo.git
 ## 格式
 # git remote add <远程记录名> <远程仓库地址>
 ```
@@ -706,10 +706,10 @@ git remote add gitlab http://gitlab.gwmodel.whu.edu.cn/HPDell/GitDemo.git
 ```bash
 git remote -v
 ## 输出
-# origin  git@github.com:HPDell/GitDemo.git (fetch)
-# origin  git@github.com:HPDell/GitDemo.git (push)
-# gitlab  http://gitlab.gwmodel.whu.edu.cn/hpdell/GitDemo.git (fetch)
-# gitlab  http://gitlab.gwmodel.whu.edu.cn/hpdell/GitDemo.git (push)
+# origin  https://github.com/HPDell/GitDemo.git (fetch)
+# origin  https://github.com/HPDell/GitDemo.git (push)
+# gitlab  https://github.com/GWmodel-Lab/GitDemo.git (fetch)
+# gitlab  https://github.com/GWmodel-Lab/GitDemo.git (push)
 ```
 
 每个远程仓库对应了一个 fetch 地址和一个 push 地址，一般情况下 fetch 和 push 地址是一样的。因为我们添加远程的时候就指定了一个地址。
@@ -721,7 +721,7 @@ git remote -v
 重命名远程仓库使用 `git remote rename` ，例如把 gitlab 远程名重命名为 lab ，使用如下命令
 
 ```bash
-git remote rename gitlab lab
+git remote rename organize lab
 ## 格式
 # git remote rename <远程记录名> <新名称>
 ```
@@ -729,7 +729,7 @@ git remote rename gitlab lab
 修改远程仓库地址使用 `git remote set-url` ，例如把 gitlab 远程仓库的地址修改为 ssh 的地址，使用如下命令
 
 ```bash
-git remote set-rul gitlab git@gitlab.gwmodel.whu.edu.cn:hpdell/GitDemo.git
+git remote set-rul organize git@github.com:GWmodel-Lab/GitDemo.git
 ## 格式
 # git remote set-url <远程记录名> <新地址>
 ```
@@ -737,7 +737,7 @@ git remote set-rul gitlab git@gitlab.gwmodel.whu.edu.cn:hpdell/GitDemo.git
 **删**：如果要删除一个远程记录，如 gitlab ，则使用如下命令
 
 ```bash
-git remote remove gitlab 
+git remote remove organize 
 ## 格式
 # git remote remove <远程记录名>
 ```
@@ -768,7 +768,7 @@ git remote <动作> <远程记录名> [其他参数]
 比如我要合并 HaoKunT/GitDemo 的仓库，执行这样操作的完整流程是这样的
 
 ```bash
-git remote add HaoKunT git@github.com:HaoKunT/GitDemo.git
+git remote add HaoKunT https://github.com/HaoKunT/GitDemo.git
 git fetch HaoKunT
 git checkout HaoKunT/master 
 git checkout -b master-HaoKunT
@@ -779,7 +779,7 @@ git merge --no-ff master-HaoKunT
 或者省略到中间 `git checkout` 的操作，直接合并“远程分支”。
 
 ```bash
-git remote add HaoKunT git@github.com:HaoKunT/GitDemo.git
+git remote add HaoKunT https://github.com/HaoKunT/GitDemo.git
 git fetch HaoKunT
 git merge --no-ff HaoKunT/master
 ```
@@ -1014,7 +1014,7 @@ A1 -> A2
 
 ```bash
 # [branch: main]
-git remote add organize git@github.com:GWmodel-Lab/GitDemo.git
+git remote add organize https://github.com/GWmodel-Lab/GitDemo.git
 git fetch organize
 git rebase organize/main
 ```
@@ -1023,7 +1023,7 @@ git rebase organize/main
 
 ```bash
 # [branch: main]
-git remote add organize git@github.com:GWmodel-Lab/GitDemo.git
+git remote add organize https://github.com/GWmodel-Lab/GitDemo.git
 git pull --rebase organize main
 ```
 
