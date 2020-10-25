@@ -2,4 +2,4 @@
 
 + 发展方向：前端开发
 
-+ 技术栈：nestjs、vue、微信小程序
++ 技术栈：nestjs、vue、微信小程序、react
